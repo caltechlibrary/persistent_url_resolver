@@ -1,0 +1,129 @@
+body
+{
+    margin: 0;
+    padding-top: 0.5%;
+    padding-left: 1%;
+    padding-right: 1%;
+}
+
+.coda_logo img
+{
+    float: right;
+    padding-bottom: 4px;
+    border-style: none;
+}
+
+
+.archivetitle
+{
+    font: 32px Arial,Sans-serif;
+    color: #269ae3;
+    text-decoration: none;
+}
+
+.archive_subtitle
+{
+    font: 22px Arial,Sans-serif;
+    color: #204f76;
+    text-decoration: none;
+}
+
+.library_logo img
+{
+    float: left;
+    padding-bottom: 2px;
+    padding-right: 4px;
+    border-style: none;
+}
+
+.lib_logo img
+{
+    float: left;
+    padding-bottom: 2px;
+    padding-right: 4px;
+    border-style: none;
+}
+
+#maintext
+{
+    margin-top: 3em;
+    margin-bottom: 1em;
+    text-align: center;
+    font: 18px Arial, Sans-Serif;
+}
+
+#videodiv 
+{
+    margin-top: 3em;
+    margin-bottom: 1em;
+    margin-left: auto;
+    margin-right: auto;
+    width: 640px;
+    height: 426px;
+}
+
+#backurl
+{
+    text-align: center;
+    margin-bottom: 1em;
+    margin-top: 6em;
+    font: 14px Arial, Sans-serif;
+}
+
+#lectures
+{
+    margin-top: 6em;
+    margin-bottom: 4em;
+    font: 14px Arial, Sans-serif;
+}
+
+hr.second_last
+{
+    border: 0px;
+    color: #ccc;
+    background-color: #ccc;
+    height: 2px;
+}
+
+hr.last
+{
+    color: #240f78;
+    background-color: #240f78;
+}
+
+hr.top
+{
+    color: #240f78;
+    background-color: #240f78;
+    margin-top: 3em;
+}
+
+table.eptable
+{
+    margin-bottom: 1em;
+    cellpadding: 3;
+    border: 0;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 3em;
+    padding-right: 3em;
+    width: 35%;
+}
+
+th.ep_row
+{
+    valign: top;
+    border-bottom: dashed #bbf 1px;
+    padding-right: 0.25em;
+    text-align: right;
+    width: 20%;
+}
+
+td.ep_row
+{
+    valign: top;
+    border-left: dashed #bbf 1px;
+    border-bottom: dashed #bbf 1px;
+    padding-left: 0.25em;
+    text-align: left;
+}

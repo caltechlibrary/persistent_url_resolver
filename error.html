@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Error</title>
+  <link href="/css.css" rel="stylesheet">
+</head>
+<body>
+	<div id="header">
+	        <div class="lib_logo"><a
+                        href="http://library.caltech.edu"><img alt="Library
+                        Logo" src="/CLvertical.png" style="width:140px;"/></a></div>
+		<div class="coda_logo"><a
+                        href="http://libguides.caltech.edu/CODA"><img alt="CODA
+                        Logo" src="/codalogo.jpg" /></a></div>
+	</div>
+
+	<hr class="top"/>
+
+        <div id="maintext">
+            <h1>Error</h1>
+            <p id="item"></p>
+            <script>
+            var x = window.location.pathname;
+            document.getElementById("item").innerHTML = "The Unique ID: "+x+" cannot be found.";
+            </script>
+            <p>
+            Try again in a minute, or 
+            <a href=mailto:library@caltech.edu>contact us.</a>
+	    </p>
+        </div>
+
+        <hr class="last"/>
+    </body>
+</html>
