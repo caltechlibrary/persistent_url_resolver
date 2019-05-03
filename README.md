@@ -40,5 +40,6 @@ Type `python populate_urls.py` to generate DOI resolver links
 In order to get https, we need to set up a cloudfront distribution.  Go to
 cloudfront in AWS, create a Web distribution, select the resolver S3 bucket as
 the Origin Domain Name.  For now allow both HTTP and HTTPS.  Leave all the
-defaults, except add index.html as the default root object.  
+defaults, except add index.html as the default root object. Note that this will
+take a long time to deploy because there are so many objects. 
 
