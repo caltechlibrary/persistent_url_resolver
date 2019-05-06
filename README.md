@@ -37,9 +37,13 @@ Type `python make_index.py` to generate an index file.
 
 Type `python populate_urls.py` to generate DOI resolver links
 
-In order to get https, we need to set up a cloudfront distribution.  Go to
-cloudfront in AWS, create a Web distribution, select the resolver S3 bucket as
-the Origin Domain Name.  For now allow both HTTP and HTTPS.  Leave all the
-defaults, except add index.html as the default root object. Note that this will
-take a long time to deploy because there are so many objects. 
+In order to get https, we need to set up a cloudfront distribution.  First go
+to S3 settings under static website hosting and copy the domain name - it will
+be something like
+"resolver.library.caltech.edu.s3-website-us-west-2.amazonaws.com".
+Now go to cloudfront in AWS and create a Web distribution.
+Paste the S3 url as Origin Domain Name- do not use the default S3 autocomplete.  
+For now allow both HTTP and HTTPS.  Leave all the
+defaults, except add index.html as the default root object.
+Note that it will take awhile to deploy your site because there are so many objects. 
 
