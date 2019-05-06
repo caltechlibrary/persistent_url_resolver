@@ -43,7 +43,6 @@ be something like
 "resolver.library.caltech.edu.s3-website-us-west-2.amazonaws.com".
 Now go to cloudfront in AWS and create a Web distribution.
 Paste the S3 url as Origin Domain Name- do not use the default S3 autocomplete.  
-For now allow both HTTP and HTTPS.  Leave all the
-defaults, except add index.html as the default root object.
+For now allow both HTTP and HTTPS.  All the defaults should be fine.
 Note that it will take awhile to deploy your site because there are so many objects. 
 
