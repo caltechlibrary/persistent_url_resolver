@@ -6,7 +6,7 @@ import csv,os
 def get_datacite_dois(client_ids,links):
     '''Get DataCite DOIs and URLs for specific client IDs'''
     new_links = {}
-    base_url = 'https://api.datacite.org/dois?client-id='
+    base_url = 'https://api.datacite.org/dois?page[cursor]=1&page[size]=500&client-id='
     for client in client_ids:
         print('Collecting DOIs for ', client)
         url = base_url + client
