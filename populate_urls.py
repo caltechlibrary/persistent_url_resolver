@@ -18,6 +18,9 @@ def get_datacite_dois(client_ids,links):
             for doi in data['data']:
                 if doi['id'] not in links:
                     new_links[doi['id']] = doi['attributes']['url']
+                upper = doi['id'].upper()
+                if upper not in links:
+                    new_links[upper] = doi['attributes']['url']
             if 'next' in data['links']:
                 next_link = data['links']['next']
             else:
