@@ -1,4 +1,4 @@
-# Persistant URL Resolver
+# Persistent URL Resolver
 
 Resolve existing Persistent URLs in Eprints and Caltech Library DOIs using AWS
 S3
