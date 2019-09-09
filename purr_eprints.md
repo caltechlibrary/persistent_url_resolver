@@ -6,7 +6,7 @@ and the MySQL client to generate a local CSV file mapping
 the Resolver ids (id_number in EPrints) to their target 
 record urls.
 
-Example SQL for caltechthesis
+Example SQL for `purr_caltechthesis.sql`
 
 ```sql
     --
@@ -24,5 +24,9 @@ account that can run the command bmysql --batch < PURR_SCRIPT.SQL` where
 "PURR_SCRIPT.sql" is the filename that contains the select command
 to the generate tab delimited report of `resolver_id` and
 `target_url`.
+
+```bash
+    ./purr_eprints.py 'serviceaccount@thesis.example.edu' './purr_thesis.sql' 'purr_thesis.csv'
+```
 
 
