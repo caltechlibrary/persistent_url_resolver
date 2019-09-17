@@ -33,10 +33,6 @@ or whatever AWS region you're using.
 
 Copy error.html, logos, and css.css to the S3 bucket.
 
-Type `python make_index.py` to generate an index file.
-
-Type `python populate_urls.py` to generate DOI resolver links
-
 In order to get https, we need to set up a cloudfront distribution.  First go
 to S3 settings under static website hosting and copy the domain name - it will
 be something like
@@ -44,5 +40,13 @@ be something like
 Now go to cloudfront in AWS and create a Web distribution.
 Paste the S3 url as Origin Domain Name- do not use the default S3 autocomplete.  
 For now allow both HTTP and HTTPS.  All the defaults should be fine.
-Note that it will take awhile to deploy your site because there are so many objects. 
+Note that it may take awhile to deploy your site if you have many objects. 
+
+## Operation
+
+The `resolver.py` script automates setting up the resolver.  `python
+resolver.py` will find resolver links in Eprints repositories and upload them
+to S3. Normally only new links are added, but if you want to update all the
+links add the `-update` flag.  This will take many hours. If you want to update
+DOI links, add the `-dois` flag.
 
