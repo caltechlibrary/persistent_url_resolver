@@ -102,8 +102,6 @@ def make_link_history(collection, resolver, url, note):
     )  #'https://ddlgr1hc96u88.cloudfront.net/'+resolver)
     if links_differ(get.url, url):
         print(f"Mismatch between expected url {url} and actual {get.url}")
-    if "resolver.library.caltech.edu" in get.url:
-        print(f"Resolver error for {url} and {get.url}")
     if get.status_code != 200:
         print(f"URL {url} returns Error status code {get.status_code}")
     entry = {
@@ -193,7 +191,7 @@ if __name__ == "__main__":
     for r in repos:
         print(r[1])
         eprints_links = purr_eprints(r[0], r[1])
-        for l in progressbar(eprints_links, redirect_stdout=True):
+        for l in eprints_links:#progressbar(eprints_links, redirect_stdout=True):
             idv = l[0]
             url = l[1]
             # Skip header
