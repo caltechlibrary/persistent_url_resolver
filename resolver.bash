@@ -13,10 +13,10 @@ function setup_logfile() {
 	echo "${LOG_FILE}"
 }
 
-
+cd /Sites/persistent_url_resolver
 LOG_FILE=$(setup_logfile "harvest")
 echo "$(date) (pid $$) Harvest started"
-WRAP_STDERR=true python3 resolver.py >>"${LOG_FILE}" 2>&1
+python resolver.py >>"${LOG_FILE}" 2>&1
 if [[ "$?" == "0" ]]; then
 	echo "$(date) (pid $$) Harvest completed"
 else
