@@ -98,9 +98,7 @@ def make_link_history(collection, resolver, url, note):
     now = datetime.today().isoformat()
     # Run link check
     try :
-        get = requests.get(
-            #"http://resolver.library.caltech.edu/" + resolver
-      'https://ddlgr1hc96u88.cloudfront.net/'+resolver)
+        get = requests.get(f"http://resolver.library.caltech.edu/{resolver}")
     except requests.exceptions.ConnectionError:
         get = requests.Response()
         get.status_code = 404 
