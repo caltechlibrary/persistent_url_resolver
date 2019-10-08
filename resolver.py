@@ -97,9 +97,14 @@ def make_link_history(collection, resolver, url, note):
     """Make an entry in our link history collection"""
     now = datetime.today().isoformat()
     # Run link check
-    get = requests.get(
-        "http://resolver.library.caltech.edu/" + resolver
-    )  #'https://ddlgr1hc96u88.cloudfront.net/'+resolver)
+    try :
+        get = requests.get(
+            #"http://resolver.library.caltech.edu/" + resolver
+      'https://ddlgr1hc96u88.cloudfront.net/'+resolver)
+    except requests.exceptions.ConnectionError:
+        get = requests.Response()
+        get.status_code = 404 
+        get.url = ''
     if links_differ(get.url, url):
         print(f"Mismatch between expected url {url} and actual {get.url}")
     if get.status_code != 200:
@@ -167,13 +172,14 @@ if __name__ == "__main__":
             "tind.caltech",
             "caltech.library",
             "caltech.ipacdoi",
-            "caltech.micropub",
-            "caltech.hte",
+            "caltech.micropub"
         ]
         new_links = get_datacite_dois(client_ids, links)
         for l in progressbar(new_links):
-            make_s3_record(s3, bucket, l, new_links[l])
-            make_link_history(collection, l, new_links[l], "From DataCite")
+            print(l)
+            if l not in links:
+                make_s3_record(s3, bucket, l, new_links[l])
+                make_link_history(collection, l, new_links[l], "From DataCite")
 
     # Get Eprints links
     repos = [
@@ -197,5 +203,6 @@ if __name__ == "__main__":
             # Skip header
             if idv != "resolver_id":
                 if idv not in links:
+                    print(idv)
                     make_s3_record(s3, bucket, idv, url)
                     make_link_history(collection, idv, url, f"From {r[1]}")
