@@ -143,6 +143,9 @@ if __name__ == "__main__":
     parser.add_argument(
         "-dois", action="store_true", help="Get resolver links from DataCite"
     )
+    parser.add_argument(
+        "-skip_eprints", action="store_true", help="Get resolver links from DataCite"
+    )
 
     args = parser.parse_args()
 
@@ -181,8 +184,13 @@ if __name__ == "__main__":
                 make_s3_record(s3, bucket, l, new_links[l])
                 make_link_history(collection, l, new_links[l], "From DataCite")
 
-    # Get Eprints links
-    repos = [
+    eprints = True
+    if args.skip_eprints:
+        eprints = False
+
+    if eprints:
+        # Get Eprints links
+        repos = [
         ("datawork@caltechconf.library.caltech.edu", "./purr_caltechconf.sql"),
         (
             "datawork@caltechcampuspubs.library.caltech.edu",
@@ -193,16 +201,15 @@ if __name__ == "__main__":
         ("datawork@oralhistories.library.caltech.edu", "./purr_caltechoh.sql"),
         ("datawork@authors.library.caltech.edu", "./purr_authors.sql"),
         ("datawork@thesis.library.caltech.edu", "./purr_caltechthesis.sql"),
-    ]
-    for r in repos:
-        print(r[1])
-        eprints_links = purr_eprints(r[0], r[1])
-        for l in eprints_links:#progressbar(eprints_links, redirect_stdout=True):
-            idv = l[0]
-            url = l[1]
-            # Skip header
-            if idv != "resolver_id":
-                if idv not in links:
-                    print(idv)
-                    make_s3_record(s3, bucket, idv, url)
-                    make_link_history(collection, idv, url, f"From {r[1]}")
+        ]
+        for r in repos:
+            print(r[1])
+            eprints_links = purr_eprints(r[0], r[1])
+            for l in eprints_links:#progressbar(eprints_links, redirect_stdout=True):
+                idv = l[0]
+                url = l[1]
+                # Skip header
+                if idv != "resolver_id":
+                    if idv not in links:
+                        make_s3_record(s3, bucket, idv, url)
+                        make_link_history(collection, idv, url, f"From {r[1]}")
