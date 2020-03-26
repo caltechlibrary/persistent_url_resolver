@@ -121,12 +121,13 @@ def make_link_history(collection, resolver, url, note):
             past_history = existing.pop("history")
             past_history.append(existing)
             entry["history"] = past_history
-            err = dataset.update(collection, resolver, entry)
+            if dataset.update(collection, resolver, entry) == False:
+                print(dataset.error_message())
+                exit()
     else:
         entry["history"] = []
-        err = dataset.create(collection, resolver, entry)
-        if err != "":
-            print(err)
+        if dataset.create(collection, resolver, entry) == False:
+            print(dataset.error_message())
             exit()
 
 
