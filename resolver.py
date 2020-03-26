@@ -124,12 +124,12 @@ def make_link_history(collection, resolver, url, note):
             past_history = existing.pop("history")
             past_history.append(existing)
             entry["history"] = past_history
-            if dataset.update(collection, resolver, entry) == False:
+            if not dataset.update(collection, resolver, entry):
                 print(dataset.error_message())
                 exit()
     else:
         entry["history"] = []
-        if dataset.create(collection, resolver, entry) == False:
+        if not dataset.create(collection, resolver, entry):
             print(dataset.error_message())
             exit()
 
@@ -157,8 +157,7 @@ if __name__ == "__main__":
     collection = "link_history.ds"
     if os.path.isdir(collection) == False:
         make_s3_record(s3, bucket, "index.html", "https://libguides.caltech.edu/CODA")
-        ok = dataset.init(collection)
-        if ok == False:
+        if not dataset.init(collection):
             print("Dataset failed to init collection")
             exit()
 
