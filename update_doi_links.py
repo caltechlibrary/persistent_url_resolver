@@ -2,6 +2,7 @@ import requests
 from progressbar import progressbar
 from datacite import DataCiteRESTClient
 
+
 def get_datacite_dois(client_ids):
     """Get DataCite DOIs and URLs for specific client IDs"""
     links = {}
@@ -16,7 +17,7 @@ def get_datacite_dois(client_ids):
             data = r.json()
             for doi in data["data"]:
                 item_url = doi["attributes"]["url"]
-                if 'http://resolver.caltech.edu' in item_url:
+                if "http://resolver.caltech.edu" in item_url:
                     links[doi["id"]] = item_url
             if "next" in data["links"]:
                 next_link = data["links"]["next"]
@@ -26,19 +27,15 @@ def get_datacite_dois(client_ids):
 
 
 if __name__ == "__main__":
-    prefix='10.26206'
+    prefix = "10.26206"
 
-    #DataCite Setup
-    d = DataCiteRESTClient(
-    username='CALTECH.LIBRARY',
-    password='',
-    prefix=prefix,
-    )
+    # DataCite Setup
+    d = DataCiteRESTClient(username="CALTECH.LIBRARY", password="", prefix=prefix,)
 
     client_ids = ["caltech.library"]
     links = get_datacite_dois(client_ids)
     for l in progressbar(links):
-        if l.split('/')[0] == prefix:
+        if l.split("/")[0] == prefix:
             print(l)
-            new_link = links[l].replace('http://','https://')
-            d.update_url(l,new_link)
+            new_link = links[l].replace("http://", "https://")
+            d.update_url(l, new_link)

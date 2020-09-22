@@ -97,12 +97,12 @@ def make_link_history(collection, resolver, url, note):
     """Make an entry in our link history collection"""
     now = datetime.today().isoformat()
     # Run link check
-    try :
+    try:
         get = requests.get(f"http://resolver.library.caltech.edu/{resolver}")
     except requests.exceptions.ConnectionError:
         get = requests.Response()
-        get.status_code = 404 
-        get.url = ''
+        get.status_code = 404
+        get.url = ""
     if links_differ(get.url, url):
         print(f"Mismatch between expected url {url} and actual {get.url}")
     if get.status_code != 200:
@@ -173,7 +173,7 @@ if __name__ == "__main__":
             "tind.caltech",
             "caltech.library",
             "caltech.ipacdoi",
-            "caltech.micropub"
+            "caltech.micropub",
         ]
         new_links = get_datacite_dois(client_ids, links)
         for l in progressbar(new_links):
@@ -189,21 +189,21 @@ if __name__ == "__main__":
     if eprints:
         # Get Eprints links
         repos = [
-        ("datawork@caltechconf.library.caltech.edu", "./purr_caltechconf.sql"),
-        (
-            "datawork@caltechcampuspubs.library.caltech.edu",
-            "./purr_caltechcampuspubs.sql",
-        ),
-        ("datawork@calteches.library.caltech.edu", "./purr_calteches.sql"),
-        ("datawork@caltechln.library.caltech.edu", "./purr_caltechln.sql"),
-        ("datawork@oralhistories.library.caltech.edu", "./purr_caltechoh.sql"),
-        ("datawork@authors.library.caltech.edu", "./purr_authors.sql"),
-        ("datawork@thesis.library.caltech.edu", "./purr_caltechthesis.sql"),
+            ("datawork@caltechconf.library.caltech.edu", "./purr_caltechconf.sql"),
+            (
+                "datawork@caltechcampuspubs.library.caltech.edu",
+                "./purr_caltechcampuspubs.sql",
+            ),
+            ("datawork@calteches.library.caltech.edu", "./purr_calteches.sql"),
+            ("datawork@caltechln.library.caltech.edu", "./purr_caltechln.sql"),
+            ("datawork@oralhistories.library.caltech.edu", "./purr_caltechoh.sql"),
+            ("datawork@authors.library.caltech.edu", "./purr_authors.sql"),
+            ("datawork@thesis.library.caltech.edu", "./purr_caltechthesis.sql"),
         ]
         for r in repos:
             print(r[1])
             eprints_links = purr_eprints(r[0], r[1])
-            for l in eprints_links:#progressbar(eprints_links, redirect_stdout=True):
+            for l in eprints_links:  # progressbar(eprints_links, redirect_stdout=True):
                 idv = l[0]
                 url = l[1]
                 # Skip header

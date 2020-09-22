@@ -44,6 +44,10 @@ Note that it may take awhile to deploy your site if you have many objects.
 
 ## Operation
 
+If you need to manually add a resolver link, you can use the `resolver_link.py`
+ script. You provide the resolver name, the url, and a message for the log. 
+ `python change_resolver_link.py CaltechBOOK:1984.001 https://authors.library.caltech.edu/25061/ "Capitalization"`
+
 The `resolver.py` script automates setting up the resolver.  `python
 resolver.py` will find resolver links in Eprints repositories and upload them
 to S3. Normally only new links are added, but if you want to update all the
