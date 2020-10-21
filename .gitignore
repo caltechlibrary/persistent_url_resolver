@@ -1,3 +1,4 @@
+*.swp
 link_history.ds
 logs
 __pycache__
