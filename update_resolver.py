@@ -11,7 +11,7 @@ from subprocess import run, Popen, PIPE
 def usage():
     app_name = os.path.basename(sys.argv[0])
     print(f'''
-USAGE {app_name} HOSTNAME  PURR_SQL_SCRIPT
+USAGE {app_name} -host HOSTNAME  -purr_sql PURR_SQL_SCRIPT
 
 This will update all resolver URLS for given host
 and purr SQL script.
@@ -117,9 +117,19 @@ def save_history(existing, url, get):
 def make_link_history(collection, resolver, url, note):
     """Make an entry in our link history collection"""
     now = datetime.today().isoformat()
-    # Run link check
+    # Run checks on both resoler and final URL
     try :
-        get = requests.get(f"http://resolver.library.caltech.edu/{resolver}")
+        target = requests.get(url)
+    except requests.exceptions.ConnectionError:
+        target = requests.Response()
+        target.status_code = 404
+        target.url = ''
+    if target.status_code != 200:
+        print(f"Target URL {url} returns Error status code {target.status_code}")
+    if links_differ(target.url, url):
+        print(f"Target URL '{url}' redirects to '{target.url}'")
+    try :
+        get = requests.get(f"https://resolver.library.caltech.edu/{resolver}")
     except requests.exceptions.ConnectionError:
         get = requests.Response()
         get.status_code = 404 
@@ -127,7 +137,7 @@ def make_link_history(collection, resolver, url, note):
     if links_differ(get.url, url):
         print(f"Mismatch between expected url '{url}' and actual '{get.url}'")
     if get.status_code != 200:
-        print(f"URL {url} returns Error status code {get.status_code}")
+        print(f"Resolver URL ({resolver}) '{get.url}' returns Error status code {get.status_code}")
     entry = {
         "expected-url": url,
         "url": get.url,
@@ -215,6 +225,8 @@ if __name__ == "__main__":
 
     if eprints:
         # Get Eprints links
+        if (args.host == '') or (args.purr_sql == ''):
+            usage()
         repos = [(args.host, args.purr_sql)]
         for r in repos:
             print(r[1])
@@ -224,6 +236,6 @@ if __name__ == "__main__":
                 url = l[1]
                 # Skip header
                 if idv != "resolver_id":
-                    if idv not in links:
-                        make_s3_record(s3, bucket, idv, url)
-                        make_link_history(collection, idv, url, f"From {r[1]}")
+                    #if idv not in links:
+                    make_s3_record(s3, bucket, idv, url)
+                    make_link_history(collection, idv, url, f"From {r[1]}")
