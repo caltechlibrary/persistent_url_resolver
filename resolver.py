@@ -191,8 +191,8 @@ if __name__ == "__main__":
         repos = [
             ("datawork@caltechconf.library.caltech.edu", "./purr_caltechconf.sql"),
             (
-                "datawork@caltechcampuspubs.library.caltech.edu",
-                "./purr_caltechcampuspubs.sql",
+                "datawork@campuspubs.library.caltech.edu",
+                "./purr_campuspubs.sql",
             ),
             ("datawork@calteches.library.caltech.edu", "./purr_calteches.sql"),
             ("datawork@caltechln.library.caltech.edu", "./purr_caltechln.sql"),
