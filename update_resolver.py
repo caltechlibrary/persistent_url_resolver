@@ -185,6 +185,10 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
+    # Get Eprints links
+    if (args.host == '') or (args.purr_sql == '') or (args.host == None) or (args.purr_sql == None):
+        usage()
+
     # S3 Setup
     session = boto3.Session(profile_name="resolver")
     current_region = session.region_name
@@ -224,9 +228,6 @@ if __name__ == "__main__":
         eprints = False
 
     if eprints:
-        # Get Eprints links
-        if (args.host == '') or (args.purr_sql == ''):
-            usage()
         repos = [(args.host, args.purr_sql)]
         for r in repos:
             print(r[1])
