@@ -14,5 +14,11 @@
     </array>
     <key>StartInterval</key>
     <integer>600</integer>
+    <key>StandardErrorPath</key>
+        <string>/Sites/persistent_url_resolver/logs/plist-error.log</string>
+        <key>StandardOutPath</key>
+        <string>/Sites/persistent_url_resolver/logs/plist-out.log</string>
+    <key>RunAtLoad</key>
+    <true/>
 </dict>
 </plist>
