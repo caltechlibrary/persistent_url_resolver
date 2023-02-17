@@ -1,2 +1,4 @@
 boto3 >= 1.20.24
 requests >= 2.21
+progressbar
+py_dataset == 1.0.1

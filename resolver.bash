@@ -62,11 +62,13 @@ function setup_logfile() {
 	echo "${LOG_FILE}"
 }
 
+# Load the user .profile to pickup paths to things.
+. $HOME/.profile
 cd /Sites/persistent_url_resolver
 LOG_FILE=$(setup_logfile "harvest")
 echo "$(date) (pid $$) Harvest started"
 echo "$(date) (pid $$) Harvest started" >>"${LOG_FILE}"
-python3 resolver.py >>"${LOG_FILE}" 2>&1
+python resolver.py >>"${LOG_FILE}" 2>&1
 if [[ "$?" == "0" ]]; then
 	echo "$(date) (pid $$) Harvest completed"
 else
