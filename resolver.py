@@ -25,7 +25,7 @@ def purr_eprints(connect_string, sql_script_name):
     --
     USE ${DB_NAME_HERE};
     SELECT id_number, 
-      CONCAT('${URL_PREFIX_HERE','/', eprintid) 
+      CONCAT('${URL_PREFIX_HERE}','/', eprintid) 
       FROM eprint WHERE eprint_status = 'archive';
     """
     remote_cmd = f"""mysql --batch < '{sql_script_name}' """
@@ -197,8 +197,8 @@ if __name__ == "__main__":
             ("datawork@calteches.library.caltech.edu", "./purr_calteches.sql"),
             ("datawork@caltechln.library.caltech.edu", "./purr_caltechln.sql"),
             ("datawork@oralhistories.library.caltech.edu", "./purr_caltechoh.sql"),
-            ("datawork@authors.library.caltech.edu", "./purr_authors.sql"),
             ("datawork@thesis.library.caltech.edu", "./purr_caltechthesis.sql"),
+            ("datawork@authors.library.caltech.edu", "./purr_authors.sql"),
         ]
         for r in repos:
             print(r[1])
