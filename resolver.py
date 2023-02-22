@@ -1,6 +1,7 @@
+import sys
 import requests
 import boto3
-from progressbar import progressbar
+from progressbar import ProgressBar, Counter, Timer, ETA, Percentage, Bar, progressbar
 from datetime import datetime
 import csv, os, argparse
 from py_dataset import dataset
@@ -92,6 +93,26 @@ def save_history(existing, url, get):
         save = True
     return save
 
+def remember_link(collection, resolver, url, note):
+    now = datetime.today().isoformat()
+    getURL = f'https://resolver.library.caltech.edu/{resolver}'
+    entry = {
+        "expected-url": url,
+        "url": getURL,
+        "modified": now,
+        "note": note,
+    }
+    if dataset.has_key(collection, resolver):
+        if not dataset.update(collection, resolver, entry):
+            err = dataset.error_message()
+            print(err)
+            return err
+    else:
+        if not dataset.create(collection, resolver, entry):
+            err = dataset.error_message()
+            print(err)
+            return err
+    return None
 
 def make_link_history(collection, resolver, url, note):
     """Make an entry in our link history collection"""
@@ -119,19 +140,21 @@ def make_link_history(collection, resolver, url, note):
         existing, err = dataset.read(collection, resolver)
         if err != "":
             print(err)
-            exit()
+            return err
         if save_history(existing, url, get):
             past_history = existing.pop("history")
             past_history.append(existing)
             entry["history"] = past_history
             if not dataset.update(collection, resolver, entry):
-                print(dataset.error_message())
-                exit()
+                err = dataset.error_message()
+                print(err)
+                return err
     else:
         entry["history"] = []
         if not dataset.create(collection, resolver, entry):
-            print(dataset.error_message())
-            exit()
+            err = dataset.error_message()
+            print(err)
+            return err
 
 
 if __name__ == "__main__":
@@ -159,11 +182,11 @@ if __name__ == "__main__":
         make_s3_record(s3, bucket, "index.html", "https://libguides.caltech.edu/CODA")
         if not dataset.init(collection):
             print("Dataset failed to init collection")
-            exit()
+            sys.exit(1)
 
     # Get the links that already exist
     links = dataset.keys(collection)
-    if args.update:
+    if links == None or args.update:
         # Everything will get updated
         links = []
 
@@ -189,25 +212,49 @@ if __name__ == "__main__":
     if eprints:
         # Get Eprints links
         repos = [
-            ("datawork@caltechconf.library.caltech.edu", "./purr_caltechconf.sql"),
+            ("datawork@eprints.library.caltech.edu", "./purr_caltechconf.sql"),
             (
-                "datawork@campuspubs.library.caltech.edu",
+                "datawork@eprints.library.caltech.edu",
                 "./purr_campuspubs.sql",
             ),
-            ("datawork@calteches.library.caltech.edu", "./purr_calteches.sql"),
-            ("datawork@caltechln.library.caltech.edu", "./purr_caltechln.sql"),
-            ("datawork@oralhistories.library.caltech.edu", "./purr_caltechoh.sql"),
-            ("datawork@thesis.library.caltech.edu", "./purr_caltechthesis.sql"),
-            ("datawork@authors.library.caltech.edu", "./purr_authors.sql"),
+            ("datawork@eprints.library.caltech.edu", "./purr_calteches.sql"),
+            ("datawork@eprints.library.caltech.edu", "./purr_caltechln.sql"),
+            ("datawork@eprints.library.caltech.edu", "./purr_caltechoh.sql"),
+            ("datawork@eprints.library.caltech.edu", "./purr_caltechthesis.sql"),
+            ("datawork@eprints.library.caltech.edu", "./purr_authors.sql"),
         ]
         for r in repos:
-            print(r[1])
+            c_name = r[1]
+            if c_name.startswith('./purr_'):
+                c_name = c_name[7:]
+            if c_name.endswith('.sql'):
+                c_name = c_name[0:-4]
             eprints_links = purr_eprints(r[0], r[1])
-            for l in eprints_links:  # progressbar(eprints_links, redirect_stdout=True):
+            if eprints_links == None:
+                print(f'No links returned from {r[1]}')
+                continue
+            print(r[1])
+            tot = len(eprints_links)
+            bar = ProgressBar(
+                    max_value = tot,
+                    widgets = [
+                        f'{c_name} [', Counter(), f'/{tot}] ',
+                        Percentage(), ' ',
+                        ETA(),
+                    ],
+                    redirect_stdout = True,
+            )
+            for i, l in enumerate(eprints_links):  # progressbar(eprints_links, redirect_stdout=True):
                 idv = l[0]
                 url = l[1]
                 # Skip header
                 if idv != "resolver_id":
                     if idv not in links:
                         make_s3_record(s3, bucket, idv, url)
-                        make_link_history(collection, idv, url, f"From {r[1]}")
+                        #make_link_history(collection, idv, url, f"From {r[1]}")
+                        remember_link(collection, idv, url, f"From {r[1]}")
+                if (i % 250) == 0:
+                    bar.update(i)
+                    sys.stdout.flush()
+            bar.finish()
+            sys.stdout.flush()
