@@ -7,6 +7,13 @@ from py_dataset import dataset
 from subprocess import run, Popen, PIPE
 
 
+# Progressbar2 widget setup
+widgets=[
+    ' [', progressbar.Timer(), '] ',
+    progressbar.Bar(),
+    ' (', progressbar.ETA(), ') ',
+]
+
 def purr_eprints(connect_string, sql_script_name):
     """purr_eprints - contact the MySQL on a remote EPrints server and
     retrieve the assigned resolver URL and eprint record URL.
@@ -44,7 +51,7 @@ def get_datacite_dois(client_ids, links):
         url = base_url + client
         next_link = url
         meta = requests.get(next_link).json()["meta"]
-        for j in progressbar(range(meta["totalPages"])):
+        for j in progressbar(range(meta["totalPages"]), widget=widget):
             r = requests.get(next_link)
             data = r.json()
             for doi in data["data"]:
@@ -176,7 +183,7 @@ if __name__ == "__main__":
             "caltech.micropub",
         ]
         new_links = get_datacite_dois(client_ids, links)
-        for l in progressbar(new_links):
+        for l in progressbar(new_links, widget=widget):
             print(l)
             if l not in links:
                 make_s3_record(s3, bucket, l, new_links[l])
@@ -203,7 +210,7 @@ if __name__ == "__main__":
         for r in repos:
             print(r[1])
             eprints_links = purr_eprints(r[0], r[1])
-            for l in eprints_links:  # progressbar(eprints_links, redirect_stdout=True):
+            for l in progressbar(eprints_links, widget=widget, redirect_stdout=True):
                 idv = l[0]
                 url = l[1]
                 # Skip header

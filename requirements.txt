@@ -1,4 +1,4 @@
-boto3 >= 1.20.24
+boto3 >= 1.26
 requests >= 2.21
-progressbar
-py_dataset == 1.0.1
+progressbar2 >= 4.2
+py_dataset >= 2.0

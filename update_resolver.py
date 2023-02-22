@@ -150,19 +150,19 @@ def make_link_history(collection, resolver, url, note):
         existing, err = dataset.read(collection, resolver)
         if err != "":
             print(err)
-            exit()
+            sys.exit(1)
         if save_history(existing, url, get):
             past_history = existing.pop("history")
             past_history.append(existing)
             entry["history"] = past_history
             if not dataset.update(collection, resolver, entry):
                 print(dataset.error_message())
-                exit()
+                sys.exit(1)
     else:
         entry["history"] = []
         if not dataset.create(collection, resolver, entry):
             print(dataset.error_message())
-            exit()
+            sys.exit(1)
 
 
 if __name__ == "__main__":
@@ -185,6 +185,12 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
+    widgets=[
+        ' [', progressbar.Timer(), '] ',
+        progressbar.Bar(),
+        ' (', progressbar.ETA(), ') ',
+    ]
+
     # Get Eprints links
     if (args.host == '') or (args.purr_sql == '') or (args.host == None) or (args.purr_sql == None):
         usage()
@@ -197,10 +203,11 @@ if __name__ == "__main__":
 
     collection = "link_history.ds"
     if os.path.isdir(collection) == False:
+        # Create a root index page for the resolver
         make_s3_record(s3, bucket, "index.html", "https://libguides.caltech.edu/CODA")
-        if not dataset.init(collection):
+        if dataset.init(collection) == False:
             print("Dataset failed to init collection")
-            exit()
+            sys.exit(1)
 
     # Get the links that already exist
     links = dataset.keys(collection)
@@ -217,7 +224,7 @@ if __name__ == "__main__":
             "caltech.micropub"
         ]
         new_links = get_datacite_dois(client_ids, links)
-        for l in progressbar(new_links):
+        for l in progressbar(new_links, widgets=widgets):
             print(l)
             if l not in links:
                 make_s3_record(s3, bucket, l, new_links[l])
@@ -232,7 +239,7 @@ if __name__ == "__main__":
         for r in repos:
             print(r[1])
             eprints_links = purr_eprints(r[0], r[1])
-            for l in eprints_links:#progressbar(eprints_links, redirect_stdout=True):
+            for l in progressbar(eprints_links, widget = widget, redirect_stdout=True):
                 idv = l[0]
                 url = l[1]
                 # Skip header
@@ -240,3 +247,4 @@ if __name__ == "__main__":
                     #if idv not in links:
                     make_s3_record(s3, bucket, idv, url)
                     make_link_history(collection, idv, url, f"From {r[1]}")
+
