@@ -1,4 +1,4 @@
-boto3 >= 1.26
+boto3 >= 1.25
 requests >= 2.21
 progressbar2 >= 4.2
 py_dataset >= 2.0
