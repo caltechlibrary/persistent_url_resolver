@@ -29,4 +29,4 @@ if __name__ == "__main__":
     collection = "link_history.ds"
 
     resolver.make_s3_record(s3, bucket, args.id, args.url)
-    resolver.make_link_history(collection, args.id, args.url, args.message)
+    resolver.remember_link(collection, args.id, args.url, args.message)
