@@ -219,9 +219,9 @@ if __name__ == "__main__":
             ),
             ("datawork@eprints.library.caltech.edu", "./purr_calteches.sql"),
             ("datawork@eprints.library.caltech.edu", "./purr_caltechln.sql"),
-            ("datawork@eprints.library.caltech.edu", "./purr_caltechoh.sql"),
+            #("datawork@eprints.library.caltech.edu", "./purr_caltechoh.sql"),
             ("datawork@eprints.library.caltech.edu", "./purr_caltechthesis.sql"),
-            ("datawork@eprints.library.caltech.edu", "./purr_authors.sql"),
+            #("datawork@eprints.library.caltech.edu", "./purr_authors.sql"),
         ]
         for r in repos:
             c_name = r[1]
