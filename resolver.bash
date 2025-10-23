@@ -19,7 +19,7 @@ cd /Sites/persistent_url_resolver
 LOG_FILE=$(setup_logfile "harvest")
 echo "$(date) (pid $$) Harvest started"
 echo "$(date) (pid $$) Harvest started" >>"${LOG_FILE}"
-python resolver.py >>"${LOG_FILE}" 2>&1
+ur run resolver.py >>"${LOG_FILE}" 2>&1
 if [[ "$?" == "0" ]]; then
 	echo "$(date) (pid $$) Harvest completed"
 else
