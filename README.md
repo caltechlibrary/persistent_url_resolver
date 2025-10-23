@@ -1,7 +1,12 @@
 # Persistent URL Resolver
 
 Resolve existing Persistent URLs in Eprints and Caltech Library DOIs using AWS
-S3
+S3. At Caltech this is installed and runs on the betawork server.
+
+## Install
+
+We use uv to manage python dependencies. Create a local venv with `uv venv` and then
+install dependencies with `uv pip install -r requirements.txt`
 
 ## Setup
 
